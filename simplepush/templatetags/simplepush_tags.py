@@ -5,8 +5,15 @@ register = template.Library()
 
 
 @register.filter
-@register.inclusion_tag('simplepush/simplepush.html', takes_context=True)
-def simplepush_html(context):
+@register.inclusion_tag('simplepush/simplepush_meta.html', takes_context=True)
+def simplepush_meta(context):
+    request = context['request']
+    return {'request': request}
+
+
+@register.filter
+@register.inclusion_tag('simplepush/simplepush_js.html', takes_context=True)
+def simplepush_js(context):
     request = context['request']
     return {'request': request}
 
