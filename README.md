@@ -59,7 +59,7 @@ Next, inside the ``<head></head>`` tag add ``{% simplepush_meta %}``. Like follo
 	  {% simplepush_meta %}
 	</head>
 ```
-And, inside before add to your javascript ``{% simplepush_js %}``. Like following
+And, add to your javascript ``{% simplepush_js %}``. Like following
 ```html
 	{% simplepush_js %}
 	</body>
@@ -82,7 +82,7 @@ Or for jinja templates:
 	<button id="simplepush-subscribe-button" data-url="/simplepush/save_information">Subscribe to Push Messaging</button>
 ```
 
-To override subscribe button, add simplepush/simplepush_button.html to your templates folder. 
+To override subscribe button, add ``simplepush/simplepush_button.html`` to your ``templates`` folder. 
 
 ###Sending Web Push Notification
 --------------------------------
