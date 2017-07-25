@@ -46,19 +46,23 @@ Then run Migration by **``python manage.py migrate``**
 ---------------------------------------
 
 So in html template, you need to load ``simplepush_tags`` custom template tag by following: 
-If you are using built in templating engine, add ``{% load simplepush_tags %}`` in the template.Remember to load static files first with ``{% load static %}``. The service worker wont register if you did not put ``{% simplepush_html %}`` tag inside <head></head> Tags. If you are using jinja or other templating engine, you can manually add the html header and button and other information such as:
+If you are using built in templating engine, add ``{% load simplepush_tags %}`` in the template.Remember to load static files first with ``{% load static %}``. The service worker wont register if you did not put ``{% simplepush_meta %}``  tag inside <head></head> and ``{% simplepush_js %}`` before </body> Tags. If you are using jinja or other templating engine, you can manually add the html header and button and other information such as:
 
 ```html
 	<script id="simplepush-js" type="text/javascript" src="/static/simplepush/simplepush.js"></script>
 	<script id="service-worker-js" type="text/javascript" src="/static/simplepush/simplepush_serviceworker.js"></script>
 	<link rel="manifest" href="/simplepush/manifest">
-
 ```
-Next, inside the ``<head></head>`` tag add ``{% simplepush_html %}``. Like following
+Next, inside the ``<head></head>`` tag add ``{% simplepush_meta %}``. Like following
 ```html
 	<head>
-	  {% simplepush_html %}
+	  {% simplepush_meta %}
 	</head>
+```
+And, inside before add to your javascript ``{% simplepush_js %}``. Like following
+```html
+	{% simplepush_js %}
+	</body>
 ```
 
 Next, inside the ``<body></body>`` tag, insert ``{% simplepush_html_button %}``
@@ -77,6 +81,8 @@ Or for jinja templates:
 ```html
 	<button id="simplepush-subscribe-button" data-url="/simplepush/save_information">Subscribe to Push Messaging</button>
 ```
+
+To override subscribe button, add simplepush/simplepush_button.html to your templates folder. 
 
 ###Sending Web Push Notification
 --------------------------------
