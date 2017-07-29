@@ -65,7 +65,7 @@ And, add to your javascript ``{% simplepush_js %}``. Like following
 	</body>
 ```
 
-Next, inside the ``<body></body>`` tag, insert ``{% simplepush_html_button %}``
+Next, inside the ``<body></body>`` tag, insert ``{% simplepush_button %}``
 where you would like to see the **Subscribe to Push Messaging** Button.
 Like following
 ```html
@@ -83,6 +83,13 @@ Or for jinja templates:
 ```
 
 To override subscribe button, add ``simplepush/simplepush_button.html`` to your ``templates`` folder. 
+
+And the last. Add a tag ``{% simplepush_message %}`` to any place convenient for you.
+
+By default, ``{% simplepush_message %}`` is in the ``simplepush/simplepush_message.html`` and is the simple ``div`` with ``id`` ```html
+<div id="simplepush-message" hidden></div>
+```
+
 
 ###Sending Web Push Notification
 --------------------------------
