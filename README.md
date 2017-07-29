@@ -86,8 +86,9 @@ To override subscribe button, add ``simplepush/simplepush_button.html`` to your 
 
 And the last. Add a tag ``{% simplepush_message %}`` to any place convenient for you.
 
-By default, ``{% simplepush_message %}`` is in the ``simplepush/simplepush_message.html`` and is the simple ``div`` with ``id`` ```html
-<div id="simplepush-message" hidden></div>
+By default, ``{% simplepush_message %}`` is in the ``simplepush/simplepush_message.html`` and is 
+```html
+	<div id="simplepush-message" hidden></div>
 ```
 
 
