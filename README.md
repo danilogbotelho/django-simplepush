@@ -1,5 +1,5 @@
-#Django-Simplepush
-------
+Django-Simplepush
+================
 
 A plugable django app to send chrome/firefox push notifications through GCM with Notification icon support.
 a brief overview can be found here: [Google WebPushNotications](https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/)
@@ -40,9 +40,9 @@ Then include ``simplepush`` in the ``urls.py``
 
 Then run Migration by **``python manage.py migrate``**
 
-##Usage:
+Usage:
 
-###Adding Simplepush in Django Template
+Adding Simplepush in Django Template
 ---------------------------------------
 
 So in html template, you need to load ``simplepush_tags`` custom template tag by following: 
@@ -84,7 +84,7 @@ Or for jinja templates:
 
 To override subscribe button, add ``simplepush/simplepush_button.html`` to your ``templates`` folder. 
 
-###Sending Web Push Notification
+Sending Web Push Notification
 --------------------------------
 A Web Push generally have a header and body. According to the W3C Specification, the data should be encrypted in transmission. the data is addressed as payload generally. Also a TTL header should be included indicating how much time the web push server store the data if the user is not online.
 
