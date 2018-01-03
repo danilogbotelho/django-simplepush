@@ -33,5 +33,8 @@ class SubscriptionForm(forms.ModelForm):
 
 
 	def get_or_save(self, subscription_data):
+		for k in list(subscription_data.keys()):
+			if k not in self.fields:
+				del subscription_data[k]
 		subscription, created = SubscriptionInfo.objects.get_or_create(**subscription_data)
 		return subscription

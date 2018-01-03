@@ -14,7 +14,6 @@ self.addEventListener('push', function(event) {
     head = data.head,
     icon = data.icon,
     body = data.body;
-    
 
   // Keep the service worker alive until the notification is created.
   event.waitUntil(
@@ -24,14 +23,14 @@ self.addEventListener('push', function(event) {
       body: body,
       icon: icon,
       vibrate: [200, 100, 200, 100, 200, 100, 200],
+      data: data
     })
   );
 });
 
 self.addEventListener('notificationclick', function(event) {
     event.notification.close();
-    data = JSON.parse(self.payload),
-    url = data.body.link;
+    url = event.notification.data.link;
     
     event.waitUntil(
         clients.matchAll({
