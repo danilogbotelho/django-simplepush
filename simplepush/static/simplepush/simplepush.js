@@ -3,6 +3,26 @@ var isPushEnabled = false,
   messageBox,
   registration;
 
+var messages = {
+  'subscribe': 'Subscribe to Push Messaging',
+  'unsubscribe': 'Unsubscribe to Push Messaging',
+  'loading': 'Loading...',
+  'denied': 'The Push Notification is blocked in your browser.',
+  'no_push': 'Push Notification is not available in the browser',
+  'no_subscription': 'Subscription is not available',
+  'sw_not_supported': 'Service Worker is not supported in your Browser!',
+  'notifications_not_supported': 'Showing Notifications is not supported in your browser',
+  'subscribe_ok': 'Successfully subscribed for Push Notification',
+  'unsubscribe_ok': 'Successfully unsubscribed for Push Notification',
+  'unsubscribe_error': 'Error during unsubscribe from Push Notification'
+};
+
+var new_messages = window.simplepush_messages || {};
+
+for(k in new_messages){
+  messages[k] = new_messages[k];
+}
+
 window.addEventListener('load', function() {
   subBtn = document.getElementById('simplepush-subscribe-button');
   messageBox = document.getElementById('simplepush-message');
@@ -20,29 +40,44 @@ window.addEventListener('load', function() {
         navigator.serviceWorker.register(serviceWorker)
           .then(
             function(reg) {
-              subBtn.textContent = 'Loading....';
+              subBtn.textContent = messages['loading'];
               registration = reg;
-              initialiseState(reg);
+              if(initialiseState(reg)){
+                subscribe(reg);
+              };
             }
           );
       }
       // If service worker not supported, show warning to the message box
       else {  
-        messageBox.textContent = 'Service Worker is not supported in your Browser!';
+        messageBox.textContent = messages['sw_not_supported'];
         messageBox.style.display = 'block'; 
       }
     }
   );
+
+  navigator.serviceWorker.ready.then(function(reg){
+    if(initialiseState(reg)){
+      reg.pushManager.getSubscription().then(function(subscription){
+        if(subscription){
+          subBtn.textContent = messages['unsubscribe'];
+          subBtn.disabled = false;
+          isPushEnabled = true;
+          registration = reg;
+        }
+      });
+    };
+  });
 
   // Once the service worker is registered set the initial state  
   function initialiseState(reg) {
     // Are Notifications supported in the service worker?  
     if (!(reg.showNotification)) {
         // Show a message and activate the button
-        messageBox.textContent = 'Showing Notification is not suppoted in your browser';
-        subBtn.textContent = 'Subscribe to Push Messaging';
+        messageBox.textContent = messages['notifications_not_supported'];
+        //subBtn.textContent = 'Subscribe to Push Messaging';
         messageBox.style.display = 'block';
-        return;
+        return false;
     }
 
     // Check the current Notification permission.  
@@ -50,25 +85,25 @@ window.addEventListener('load', function() {
     // user changes the permission  
     if (Notification.permission === 'denied') {
       // Show a message and activate the button
-      messageBox.textContent = 'The Push Notification is blocked from your browser.';
-      subBtn.textContent = 'Subscribe to Push Messaging';
+      messageBox.textContent = messages['denied'];
+      subBtn.textContent = messages['subscribe'];
       subBtn.disabled = false;
       messageBox.style.display = 'block';
-      return;  
+      return false;
     }
 
     // Check if push messaging is supported  
     if (!('PushManager' in window)) {
       // Show a message and activate the button 
-      messageBox.textContent = 'Push Notification is not available in the browser';
-      subBtn.textContent = 'Subscribe to Push Messaging';
+      messageBox.textContent = messages['no_push'];
+      subBtn.textContent = messages['subscribe'];
       subBtn.disabled = false;
       messageBox.style.display = 'block';
-      return;  
+      return false;
     }
 
-    // We need to subscribe for push notification and send the information to server  
-    subscribe(reg)
+    // We may subscribe for push notification and send the information to server
+    return true;
   }
 }
 );
@@ -114,7 +149,7 @@ function unsubscribe() {
           // No subscription object, so set the state
           // to allow the user to subscribe to push
           subBtn.disabled = false;
-          messageBox.textContent = 'Subscription is not available';
+          messageBox.textContent = messages['no_subscription'];
           messageBox.style.display = 'block';
           return;
         }
@@ -146,10 +181,10 @@ function postSubscribeObj(statusType, subscription) {
         // Check the information is saved successfully into server
         if ((response.status == 201) && (statusType == 'subscribe')) {
           // Show unsubscribe button instead
-          subBtn.textContent = 'Unsubscribe to Push Messaging';
+          subBtn.textContent = messages['unsubscribe'];
           subBtn.disabled = false;
           isPushEnabled = true;
-          messageBox.textContent = 'Successfully subscribed for Push Notification';
+          messageBox.textContent = messages['subscribe_ok'];
           messageBox.style.display = 'block';
         }
 
@@ -163,8 +198,8 @@ function postSubscribeObj(statusType, subscription) {
                 subscription.unsubscribe()
                 .then(
                   function(successful) {
-                    subBtn.textContent = 'Subscribe to Push Messaging';
-                    messageBox.textContent = 'Successfully unsubscribed for Push Notification';
+                    subBtn.textContent = messages['subscribe'];
+                    messageBox.textContent = messages['unsubscribe_ok'];
                     messageBox.style.display = 'block';
                     isPushEnabled = false;
                     subBtn.disabled = false;
@@ -174,8 +209,8 @@ function postSubscribeObj(statusType, subscription) {
             )
             .catch(
               function(error) {
-                subBtn.textContent = 'Unsubscribe to Push Messaging';
-                messageBox.textContent = 'Error during unsubscribe from Push Notification';
+                subBtn.textContent = messages['unsubscribe'];
+                messageBox.textContent = messages['unsubscribe_error'];
                 messageBox.style.display = 'block';
                 subBtn.disabled = false;
               }
