@@ -20,7 +20,9 @@ class PushInformation(models.Model):
 		related_name='simplepush_info',
 		blank=True, null=True,
 		on_delete=models.CASCADE)
-	subscription = models.ForeignKey(SubscriptionInfo)
+	subscription = models.ForeignKey(
+		SubscriptionInfo,
+		on_delete=models.CASCADE)
 	added_on = models.DateTimeField(auto_now_add=True)
 	updated_on = models.DateTimeField(auto_now=True)
 
