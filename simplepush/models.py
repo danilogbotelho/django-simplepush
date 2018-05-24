@@ -15,7 +15,11 @@ class SubscriptionInfo(models.Model):
 
 
 class PushInformation(models.Model):
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='simplepush_info', blank=True, null=True)
+	user = models.ForeignKey(
+		settings.AUTH_USER_MODEL,
+		related_name='simplepush_info',
+		blank=True, null=True,
+		on_delete=models.CASCADE)
 	subscription = models.ForeignKey(SubscriptionInfo)
 	added_on = models.DateTimeField(auto_now_add=True)
 	updated_on = models.DateTimeField(auto_now=True)
